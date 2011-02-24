@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <AbsoluteLayout android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/absoluteLayout" android:layout_height="fill_parent">
+        <EditText android:layout_x="22dip" android:text="Numer telefonu" android:layout_y="34dip" android:id="@+id/txt_numer" android:layout_height="50dip" android:layout_width="250dip"></EditText>
+        <EditText android:layout_x="23dip" android:text="Wiadomość" android:layout_y="106dip" android:layout_height="200dip" android:layout_width="250dip" android:id="@+id/txt_wiadomosc"></EditText>
+        <Button android:text="Wyślij" android:layout_x="66dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_y="325dip" android:id="@+id/btn_wyslij"></Button>
+        <Button android:text="Button" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_x="163dip" android:layout_y="322dip" android:id="@+id/btn_contact"></Button>
+    </AbsoluteLayout>
+
