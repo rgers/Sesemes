@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:enabled="true" android:id="@+id/menu_ustawienia" android:visible="true" android:title="@string/manu_ustawienia"></item>
+</menu>

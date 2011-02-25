@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <RelativeLayout android:layout_height="match_parent" android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_x="5dip" android:layout_y="5dip" xmlns:android="http://schemas.android.com/apk/res/android">
+            <ListView android:id="@+id/listView1" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_below="@+id/button1" android:layout_alignLeft="@+id/button1" android:layout_alignRight="@+id/button1"></ListView>
+            <Button android:layout_height="wrap_content" android:id="@+id/button1" android:text="Button" android:layout_width="match_parent" android:layout_alignParentLeft="true"></Button>
+        </RelativeLayout>

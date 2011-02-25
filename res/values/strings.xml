@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, Sesemes!</string>
     <string name="app_name">Sesemes</string>
+    <string name="btn_contact">Kontakty</string>
+    <string name="manu_ustawienia">Ustawienia</string>
 </resources>

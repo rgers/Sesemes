@@ -40,6 +40,7 @@ import org.apache.http.protocol.HttpContext;
 import pl.gers.sesemes.R;
 import android.R.string;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -49,8 +50,13 @@ import android.provider.Contacts;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -64,9 +70,33 @@ public class Sesemes extends Activity implements OnClickListener{
 		btn_wyslij.setOnClickListener(this);
 		Button btn_contact = (Button) findViewById(R.id.btn_contact);
 		btn_contact.setOnClickListener(this);
+		    }
+@Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+    	 MenuInflater inflater = getMenuInflater();
+    	    inflater.inflate(R.menu.main_menu, menu);
+		return true;
+    
     }
-
-	@Override
+   
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle item selection
+    switch (item.getItemId()) {
+    case R.id.menu_ustawienia:
+        ustawienia();
+        return true;
+    default:
+        return super.onOptionsItemSelected(item);
+    }
+}
+    
+	private void ustawienia() {
+	Intent myint = new Intent(this, Ustawienia.class);
+	startActivity(myint);
+	
+}
 	public void onClick(View v) 
 	{
 		int id = v.getId();
@@ -79,7 +109,6 @@ public class Sesemes extends Activity implements OnClickListener{
 		case (R.id.btn_contact):
 			get_contact();
 		break;
-		
 		}
 		
 	}
@@ -109,13 +138,15 @@ public class Sesemes extends Activity implements OnClickListener{
 
 	public void send_sms()
 	{
+		ProgressDialog dialog = ProgressDialog.show(this, "", 
+                "Wysy≥am. ProszÍ czekaÊ...", true);
 		 HttpResponse resp = null;
 		 SchemeRegistry schemeRegistry = new SchemeRegistry();
 		 schemeRegistry.register(new Scheme("https", 
 		             SSLSocketFactory.getSocketFactory(), 443));
 		 HttpParams params = new BasicHttpParams();
 		 HttpContext localContext = null;
-		 SingleClientConnManager mgr = new SingleClientConnManager(params, schemeRegistry);
+		
 		HttpClient klient = new DefaultHttpClient();
 		CookieStore cookieJar = new BasicCookieStore();
 		EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
@@ -125,7 +156,7 @@ public class Sesemes extends Activity implements OnClickListener{
 
 		// Bind custom cookie store to the local context
 		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieJar);
-		HttpUriRequest urirequest;
+		
 		HttpPost postr = new HttpPost();
 		try {
 			postr.setURI(new URI("https://www.orange.pl/start.phtml"));
@@ -202,12 +233,12 @@ public class Sesemes extends Activity implements OnClickListener{
 			postr.setHeader("Referer", "http://www.orange.pl/start.phtml");
 			postr.setHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.13 (KHTML, like Gecko) Chrome/9.0.597.98 Safari/534.13");
 			resp = klient.execute(postr, localContext);
-			int a=0;
+			/*int a=0;
 			while(a<cookieJar.getCookies().size())
 			{
 			Log.v("cookie", cookieJar.getCookies().get(a).getName() + "=" + cookieJar.getCookies().get(a).getValue());
 			a++;
-			}
+			} */
 		/*	HttpPost postr2 = new HttpPost();
 			try {
 				postr2.setURI(new URI("http://www.orange.pl/portal/map/map/message_box?mbox_edit=new&stamp=1298549505941&mbox_view=newsms"));
@@ -274,6 +305,8 @@ public class Sesemes extends Activity implements OnClickListener{
 		token_indx=token_indx-74;
 		String smstoken = sb.substring(token_indx, token_indx+15);
 		Log.v("cookie",smstoken);
+		
+		String message = stripNonAscii(txt_wiadomosc.getText().toString());
 		List<NameValuePair> pairs1 = new ArrayList<NameValuePair>(); 
 		
 		pairs1.add(new BasicNameValuePair("_dyncharset", "UTF-8"));
@@ -287,7 +320,7 @@ public class Sesemes extends Activity implements OnClickListener{
 		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.to", txt_numer.getText().toString()));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.to", " "));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.body", " "));
-		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.body", txt_wiadomosc.getText().toString()));
+		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.body", message));
 		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.token", smstoken));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.token", " "));
 		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.create.x", "51"));
@@ -321,7 +354,7 @@ public class Sesemes extends Activity implements OnClickListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 try {
+	/*	 try {
 				in = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
@@ -353,6 +386,32 @@ public class Sesemes extends Activity implements OnClickListener{
          String page = sb.substring(a,a+50);
          Log.v("html", page);
          a=a+50;
-		}
+		} */
+		txt_wiadomosc.setText("");
+		dialog.dismiss();
+	}
+
+
+
+	private String stripNonAscii(String msg) {
+		msg=msg.replace("•", "A");
+		msg=msg.replace("π", "a");
+		msg=msg.replace("∆", "C");
+		msg=msg.replace("Ê", "c");
+		msg=msg.replace(" ", "E");
+		msg=msg.replace("Í", "e");
+		msg=msg.replace("£", "L");
+		msg=msg.replace("≥", "l");
+		msg=msg.replace("—", "N");
+		msg=msg.replace("Ò", "n");
+		msg=msg.replace("”", "O");
+		msg=msg.replace("Û", "o");
+		msg=msg.replace("å", "S");
+		msg=msg.replace("ú", "s");
+		msg=msg.replace("è", "Z");
+		msg=msg.replace("ü", "z");
+		msg=msg.replace("Ø", "Z");
+		msg=msg.replace("ø", "z");
+		return msg;
 	}
 }
