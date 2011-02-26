@@ -16,12 +16,12 @@ public final class R {
     public static final class id {
         public static final int btn_contact=0x7f060001;
         public static final int btn_wyslij=0x7f060004;
-        public static final int button1=0x7f060007;
-        public static final int listView1=0x7f060006;
         public static final int menu_ustawienia=0x7f060008;
         public static final int relativeLayout1=0x7f060000;
         public static final int textView1=0x7f060005;
         public static final int txt_numer=0x7f060002;
+        public static final int txt_pass=0x7f060007;
+        public static final int txt_user=0x7f060006;
         public static final int txt_wiadomosc=0x7f060003;
     }
     public static final class layout {
@@ -36,5 +36,6 @@ public final class R {
         public static final int btn_contact=0x7f040002;
         public static final int hello=0x7f040000;
         public static final int manu_ustawienia=0x7f040003;
+        public static final int ustawienia_info=0x7f040004;
     }
 }

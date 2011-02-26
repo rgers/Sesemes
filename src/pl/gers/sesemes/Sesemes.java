@@ -41,7 +41,10 @@ import pl.gers.sesemes.R;
 import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
@@ -63,10 +66,13 @@ import android.widget.EditText;
 
 public class Sesemes extends Activity implements OnClickListener{
     /** Called when the activity is first created. */
+	String user, passwd;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
         Button btn_wyslij = (Button) findViewById(R.id.btn_wyslij);
 		btn_wyslij.setOnClickListener(this);
 		Button btn_contact = (Button) findViewById(R.id.btn_contact);
@@ -106,6 +112,11 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		case (R.id.btn_wyslij):
 			EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+		SharedPreferences prefs = getSharedPreferences("prefs", 0);
+        user = prefs.getString("user", "");
+        passwd = prefs.getString("passwd", "");
+        if (user=="" || passwd=="")
+        {ustawienia(); break;}
 			new send_sms().execute(txt_wiadomosc.getText().toString(), txt_numer.getText().toString());
 		break;
 		
@@ -156,7 +167,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		
 		protected Void doInBackground(String...strings)
 		{
-		
+			
 		 HttpResponse resp = null;
 		 SchemeRegistry schemeRegistry = new SchemeRegistry();
 		 schemeRegistry.register(new Scheme("https", 
@@ -205,9 +216,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		
 
 		params.setParameter("_dyncharset", "UTF-8");
-		params.setParameter("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", "radekg");
+		params.setParameter("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", user);
 		params.setParameter("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", " ");
-		params.setParameter("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", "al0nz0");
+		params.setParameter("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", passwd);
 		params.setParameter("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", " ");
 		params.setParameter("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", "/start.phtml");
 		params.setParameter("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", " ");
@@ -221,9 +232,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(); 
 	
 		pairs.add(new BasicNameValuePair("_dyncharset", "UTF-8"));
-		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", "radekg"));
+		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", user));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", " "));
-		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", "al0nz0"));
+		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", passwd));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", " "));
 		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", "/start.phtml"));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", " "));
@@ -405,6 +416,18 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		} */
 		//txt_wiadomosc.setText("");
 		//dialog.dismiss();
+		 final String TELEPHON_NUMBER_FIELD_NAME = "address";
+		 final String MESSAGE_BODY_FIELD_NAME = "body";
+		 final Uri SENT_MSGS_CONTET_PROVIDER = Uri.parse("content://sms/sent");
+		
+		  
+
+		ContentValues sentSms = new ContentValues();
+		     sentSms.put(TELEPHON_NUMBER_FIELD_NAME, strings[1]);
+		     sentSms.put(MESSAGE_BODY_FIELD_NAME, message);
+		     ContentResolver contentResolver = getContentResolver();
+		     contentResolver.insert(SENT_MSGS_CONTET_PROVIDER, sentSms);
+
 		return null;
 		}
 	}
