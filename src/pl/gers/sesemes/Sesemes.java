@@ -45,6 +45,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
@@ -103,7 +104,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		switch(id)
 		{
 		case (R.id.btn_wyslij):
-			send_sms();
+			EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
+		EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+			new send_sms().execute(txt_wiadomosc.getText().toString(), txt_numer.getText().toString());
 		break;
 		
 		case (R.id.btn_contact):
@@ -136,10 +139,24 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	        }  
 	    }  
 
-	public void send_sms()
+	private class send_sms extends AsyncTask<String, Void, Void>
 	{
-		ProgressDialog dialog = ProgressDialog.show(this, "", 
-                "Wysy³am. Proszê czekaæ...", true);
+		ProgressDialog dialog;
+		protected void onPreExecute()
+		{
+			dialog = ProgressDialog.show(Sesemes.this, "", "Wysy³am. Proszê czekaæ...", true);
+		}
+		
+		protected void onPostExecute(Void result)
+		{
+			dialog.dismiss();
+			EditText wiadomosc = (EditText)findViewById(R.id.txt_wiadomosc);
+			wiadomosc.setText("");
+		}
+		
+		protected Void doInBackground(String...strings)
+		{
+		
 		 HttpResponse resp = null;
 		 SchemeRegistry schemeRegistry = new SchemeRegistry();
 		 schemeRegistry.register(new Scheme("https", 
@@ -149,8 +166,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		
 		HttpClient klient = new DefaultHttpClient();
 		CookieStore cookieJar = new BasicCookieStore();
-		EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
-		EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+		
 		// Creating a local HTTP context
 		localContext = new BasicHttpContext();
 
@@ -306,7 +322,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		String smstoken = sb.substring(token_indx, token_indx+15);
 		Log.v("cookie",smstoken);
 		
-		String message = stripNonAscii(txt_wiadomosc.getText().toString());
+		String message = stripNonAscii(strings[0]);
 		List<NameValuePair> pairs1 = new ArrayList<NameValuePair>(); 
 		
 		pairs1.add(new BasicNameValuePair("_dyncharset", "UTF-8"));
@@ -317,7 +333,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.errorURL", " "));
 		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.successURL", "/portal/map/map/message_box?mbox_view=messageslist"));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.successURL", " "));
-		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.to", txt_numer.getText().toString()));
+		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.to", strings[1]));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.to", " "));
 		pairs1.add(new BasicNameValuePair("_D:/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.body", " "));
 		pairs1.add(new BasicNameValuePair("/amg/ptk/map/messagebox/formhandlers/MessageFormHandler.body", message));
@@ -387,8 +403,10 @@ public boolean onOptionsItemSelected(MenuItem item) {
          Log.v("html", page);
          a=a+50;
 		} */
-		txt_wiadomosc.setText("");
-		dialog.dismiss();
+		//txt_wiadomosc.setText("");
+		//dialog.dismiss();
+		return null;
+		}
 	}
 
 
