@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 
 public class Ustawienia extends Activity implements TextWatcher{
@@ -32,7 +30,6 @@ public class Ustawienia extends Activity implements TextWatcher{
 
 	
 
-	@Override
 	public void afterTextChanged(Editable arg0) {
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
 		SharedPreferences.Editor edytor = prefs.edit();
@@ -43,14 +40,12 @@ public class Ustawienia extends Activity implements TextWatcher{
 		edytor.commit();
 	}
 
-	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// TODO Auto-generated method stub
 		
