@@ -5,4 +5,5 @@
     <string name="btn_contact">Kontakty</string>
     <string name="manu_ustawienia">Ustawienia</string>
     <string name="ustawienia_info">Podaj login oraz hasło do Orange Multibox</string>
+    <string name="menu_oautorze">O Autorze...</string>
 </resources>

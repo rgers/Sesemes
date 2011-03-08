@@ -12,9 +12,10 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -58,6 +59,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class Sesemes extends Activity implements OnClickListener, TextWatcher{
     /** Called when the activity is first created. */
 	String user, passwd;
@@ -66,13 +69,24 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+        Intent intent = getIntent();
+        Uri int_uri = intent.getData();
+        String tel=null;
+        if (int_uri!=null)
+        	{
+        	
+      tel =int_uri.getEncodedSchemeSpecificPart();
+      EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+      txt_numer.setText(tel);
+        	}
         Button btn_wyslij = (Button) findViewById(R.id.btn_wyslij);
 		btn_wyslij.setOnClickListener(this);
 		Button btn_contact = (Button) findViewById(R.id.btn_contact);
 		btn_contact.setOnClickListener(this);
 		EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		txt_wiadomosc.addTextChangedListener(this);
+		
+		
 		    }
 @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -90,6 +104,26 @@ public boolean onOptionsItemSelected(MenuItem item) {
     case R.id.menu_ustawienia:
         ustawienia();
         return true;
+    case R.id.menu_oautorze:
+    	new AlertDialog.Builder(Sesemes.this)
+
+		.setTitle("O Autorze...")
+
+		.setMessage("Autor: Rados³aw Gers\nE-Mail: sesemes@10g.pl\nWszelkie prawa zastrze¿one.")
+
+		.setNeutralButton("Ok",
+
+		new DialogInterface.OnClickListener() {
+
+		public void onClick(DialogInterface dialog2,
+
+		int which) {
+			dialog2.dismiss();
+
+		}
+
+		}).show();
+    	return true;
     default:
         return super.onOptionsItemSelected(item);
     }
@@ -198,7 +232,20 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		 HttpContext localContext = null;
 		 HttpConnectionParams.setConnectionTimeout(params, 20000);
 		 HttpConnectionParams.setSoTimeout(params, 20000);
-		HttpClient klient = new DefaultHttpClient(params);
+		DefaultHttpClient klient = new DefaultHttpClient(params);
+		RedirectHandler rh = new RedirectHandler() {
+	        public URI getLocationURI(HttpResponse response,
+	                HttpContext context) throws ProtocolException {
+	            return null;
+	        }
+
+	        public boolean isRedirectRequested(HttpResponse response,
+	                HttpContext context) {
+	            return false;
+	        }
+	    };
+		klient.setRedirectHandler(rh);
+				
 		CookieStore cookieJar = new BasicCookieStore();
 		
 		// Creating a local HTTP context
@@ -280,7 +327,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		int token_indx = sb.indexOf("MessageFormHandler.token");
 		token_indx=token_indx-74;
 		String smstoken = sb.substring(token_indx, token_indx+15);
-		Log.v("cookie",smstoken);
+		//Log.v("cookie",smstoken);
 		
 		String message = stripNonAscii(strings[0]);
 		List<NameValuePair> pairs1 = new ArrayList<NameValuePair>(); 
