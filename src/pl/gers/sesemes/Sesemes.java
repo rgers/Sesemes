@@ -64,6 +64,7 @@ import android.widget.Toast;
 public class Sesemes extends Activity implements OnClickListener, TextWatcher{
     /** Called when the activity is first created. */
 	String user, passwd;
+	Integer smsy_free, smsy_paid;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,9 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
         Intent intent = getIntent();
         Uri int_uri = intent.getData();
         String tel=null;
+        SharedPreferences prefs = getSharedPreferences("prefs", 0);
+        smsy_free=prefs.getInt("smsy_free", 0);
+        smsy_paid=prefs.getInt("smsy_paid", 0);
         if (int_uri!=null)
         	{
         	
@@ -212,9 +216,13 @@ public boolean onOptionsItemSelected(MenuItem item) {
 			}
 
 			}).show();}else{
+				SharedPreferences prefs = getSharedPreferences("prefs", 0);
+		        
 			EditText wiadomosc = (EditText)findViewById(R.id.txt_wiadomosc);
 			wiadomosc.setText("");
-			Toast.makeText(Sesemes.this, "Wiadomoœæ wys³ana.", Toast.LENGTH_LONG).show();
+			Integer smsy_free = prefs.getInt("smsy_free",0);
+			Integer smsy_paid = prefs.getInt("smsy_paid", 0);
+			Toast.makeText(Sesemes.this, "Wiadomoœæ wys³ana. Pozosta³o " + smsy_free.toString() + " smsów bezp³atnych oraz "+smsy_paid.toString()+" smsów z do³adowania.", Toast.LENGTH_LONG).show();
 			}
 		}
 		
@@ -329,6 +337,20 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		String smstoken = sb.substring(token_indx, token_indx+15);
 		//Log.v("cookie",smstoken);
 		
+	    int indx = sb.indexOf("bezp³atne :")+38;
+	    int indx_end = sb.indexOf("<", indx);
+	    //Log.v("Sesemes", sb.substring(indx,indx_end));
+
+	    Integer smsy_free_ = Integer.valueOf(sb.substring(indx,indx_end));
+	    indx = sb.indexOf("z do³adowañ:", indx_end)+39;
+	    indx_end = sb.indexOf("<", indx);
+	    Integer smsy_paid_ = Integer.valueOf(sb.substring(indx,indx_end));
+	    SharedPreferences prefs = getSharedPreferences("prefs", 0);
+	    SharedPreferences.Editor edytor = prefs.edit();
+		edytor.putInt("smsy_free", smsy_free_.intValue());
+		edytor.putInt("smsy_paid", smsy_paid_.intValue());
+		edytor.commit();
+		
 		String message = stripNonAscii(strings[0]);
 		List<NameValuePair> pairs1 = new ArrayList<NameValuePair>(); 
 		
@@ -388,7 +410,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		    sentSms.put(MESSAGE_BODY_FIELD_NAME, message);
 		    ContentResolver contentResolver = getContentResolver();
 		    contentResolver.insert(SENT_MSGS_CONTET_PROVIDER, sentSms);
-
+		    
+		    
 		return null;
 		}else{
 			return "Niepoprawny numer telefonu";
