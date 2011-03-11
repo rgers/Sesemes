@@ -1,20 +1,34 @@
 package pl.gers.sesemes;
 
+import java.util.ArrayList;
+
+import android.app.Activity;
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class Ustawienia extends ExpandableListActivity implements TextWatcher{
+public class Ustawienia extends Activity implements OnClickListener, TextWatcher{
 
 	
 	ExpandableListAdapter mAdapter;
@@ -23,18 +37,38 @@ public class Ustawienia extends ExpandableListActivity implements TextWatcher{
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.ustawienia);
-	    mAdapter = new MyExpandableListAdapter();
-	    setListAdapter(mAdapter);
+	  /*  mAdapter = new MyExpandableListAdapter();
+	    setListAdapter(mAdapter); */
 	    SharedPreferences prefs = getSharedPreferences("prefs", 0);
         String user = prefs.getString("user", "");
         String passwd = prefs.getString("passwd", "");
+       // String test = prefs.getString("test", "");
         EditText txt_user = (EditText) findViewById(R.id.txt_user);
         txt_user.setText(user);
         EditText txt_passwd = (EditText) findViewById(R.id.txt_pass);
         txt_passwd.setText(passwd);
+       // View txt_user1 = (View)mAdapter.getChild(0,0);
+       // txt_user1.setText(test);
 	    txt_user.addTextChangedListener(this);
 	    txt_passwd.addTextChangedListener(this);
+	    
+	   
 	
+		ListView lv1=(ListView)findViewById(R.id.listView1);
+		 String[] COUNTRIES = new String[] {
+			    "Konto 1", "Konto 2", "Konto 3" };
+		 
+		 lv1.setOnItemClickListener(new OnItemClickListener() {
+			    public void onItemClick(AdapterView<?> parent, View view,
+			        int position, long id) {
+			      // When clicked, show a toast with the TextView text
+			      Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+			          Toast.LENGTH_SHORT).show();
+			    }
+			  });
+		 ArrayList<String> test = new ArrayList<String>();
+		 test.
+		lv1.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, COUNTRIES));
 	    // TODO Auto-generated method stub
 	}
 
@@ -43,10 +77,12 @@ public class Ustawienia extends ExpandableListActivity implements TextWatcher{
 	public void afterTextChanged(Editable arg0) {
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
 		SharedPreferences.Editor edytor = prefs.edit();
+		EditText txt_user1 = (EditText)mAdapter.getChild(0,0);
 		EditText txt_user = (EditText) findViewById(R.id.txt_user);
 		EditText txt_passwd = (EditText) findViewById(R.id.txt_pass);
 		edytor.putString("user", txt_user.getText().toString());
 		edytor.putString("passwd", txt_passwd.getText().toString());
+		edytor.putString("test", txt_user1.getText().toString());
 		edytor.commit();
 	}
 
@@ -65,12 +101,11 @@ public class Ustawienia extends ExpandableListActivity implements TextWatcher{
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     // Sample data set.  children[i] contains the children (String[]) for groups[i].
-    private String[] groups = { "People Names", "Dog Names", "Cat Names", "Fish Names" };
+    private String[] groups = { "Konto 1", "Konto 2", "Konto 3" };
     private String[][] children = {
-            { "Arnold", "Barry", "Chuck", "David" },
-            { "Ace", "Bandit", "Cha-Cha", "Deuce" },
-            { "Fluffy", "Snuggles" },
-            { "Goldy", "Bubbles" }
+            { "" },
+            { "" },
+            { "" }
     };
 
     public Object getChild(int groupPosition, int childPosition) {
@@ -101,9 +136,22 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
             View convertView, ViewGroup parent) {
-        TextView textView = getGenericView();
-        textView.setText(getChild(groupPosition, childPosition).toString());
-        return textView;
+    	LinearLayout lej = new LinearLayout(Ustawienia.this);
+    	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 64);
+    	EditText nazwa = new EditText(Ustawienia.this);
+        nazwa.setHint("Nazwa");
+        nazwa.setLayoutParams(lp);
+        EditText user = new EditText(Ustawienia.this);
+        user.setHint("U¿ytkownik");
+        user.setLayoutParams(lp);
+        EditText pass = new EditText(Ustawienia.this);
+        pass.setHint("Has³o");
+        pass.setLayoutParams(lp);
+        lej.addView(nazwa);
+        lej.addView(user);
+        lej.addView(pass);
+        lej.setOrientation(LinearLayout.VERTICAL);
+        return lej;
     }
 
     public Object getGroup(int groupPosition) {
@@ -133,6 +181,16 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+}
+
+
+
+public void onClick(View v) {
+	Intent myint = new Intent(this, Konto.class);
+	myint.putExtra("numer_konta", 1);
+	
+	startActivity(myint);
+	
 }
 
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-        <RelativeLayout android:layout_height="match_parent" android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_x="5dip" android:layout_y="5dip" xmlns:android="http://schemas.android.com/apk/res/android">
-            <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:text="@string/ustawienia_info" android:layout_width="450dip"></TextView>
-            <EditText android:layout_width="250dip" android:text="" android:layout_height="wrap_content" android:hint="Użytkownik" android:id="@+id/txt_user" android:layout_below="@+id/textView1" android:layout_alignLeft="@+id/textView1" android:layout_alignRight="@+id/textView1"></EditText>
-            <EditText android:layout_height="wrap_content" android:hint="Hasło" android:layout_width="wrap_content" android:text="" android:id="@+id/txt_pass" android:layout_below="@+id/txt_user" android:layout_alignLeft="@+id/txt_user" android:layout_alignRight="@+id/txt_user" android:password="true"></EditText>
-        </RelativeLayout>
