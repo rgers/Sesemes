@@ -54,6 +54,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,9 +65,9 @@ import android.widget.Toast;
 
 
 
-public class Sesemes extends Activity implements OnClickListener, TextWatcher{
+public class Sesemes extends Activity implements OnClickListener, TextWatcher, OnFocusChangeListener{
     /** Called when the activity is first created. */
-	String user, passwd;
+	String user, passwd, sendto;
 	Integer smsy_free, smsy_paid;
 	Integer acc_hash=0;
 	
@@ -77,14 +78,16 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
         Intent intent = getIntent();
         Uri int_uri = intent.getData();
         String tel=null;
-        
+        EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
         if (int_uri!=null)
         	{
         	
       tel =int_uri.getEncodedSchemeSpecificPart();
-      EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+      
       txt_numer.setText(tel);
+      sendto=tel;
         	}
+        txt_numer.setOnFocusChangeListener(this);
         Button btn_wyslij = (Button) findViewById(R.id.btn_wyslij);
 		btn_wyslij.setOnClickListener(this);
 		ImageButton btn_contact = (ImageButton) findViewById(R.id.btn_contact);
@@ -193,6 +196,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
 			SharedPreferences prefs = getSharedPreferences("prefs", 0);
 			EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+		if(txt_numer.getText().toString().charAt(0)!='<')
+		{sendto = txt_numer.getText().toString();}
 		if(prefs.getInt("no_of_accounts", 0)>1)
 		{
 		Spinner spn_konta = (Spinner) findViewById(R.id.spn_konta);
@@ -217,12 +222,14 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		}
         if (user=="" || passwd=="" || prefs.getInt("no_of_accounts", 0)==0)
         {Toast.makeText(Sesemes.this, "Najpierw musisz dodaæ konto.", Toast.LENGTH_LONG).show();ustawienia(); break;}
-			new send_sms().execute(txt_wiadomosc.getText().toString(), txt_numer.getText().toString(), user, passwd, acc_hash.toString());
+			new send_sms().execute(txt_wiadomosc.getText().toString(), sendto.toString(), user, passwd, acc_hash.toString());
 		break;
 		
 		case (R.id.btn_contact):
 			get_contact();
 		break;
+		
+		
 		}
 		
 	}
@@ -241,9 +248,11 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	                    Uri contactData = data.getData();  
 	                    Cursor c = managedQuery(contactData, null, null, null, null);  
 	                    if (c.moveToFirst()) {  
-	                        String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER));  
+	                        String number = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER)); 
+	                        String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.DISPLAY_NAME));
 	                        EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
-	                        txt_numer.setText(name);  
+	                        txt_numer.setText("<" + name + ">"); 
+	                        sendto = number;
 	                    }  
 	                }  
 	                break;  
@@ -552,5 +561,20 @@ private StringBuffer getHTMLBuffer(InputStream input)
 		Integer length = txt_wiadomosc.getText().length();
 		txt_znaki.setText(length.toString());
 		
+	}
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+	if(hasFocus)
+	{
+		EditText txt_nmr = (EditText) findViewById(R.id.txt_numer);
+		if(txt_nmr.getText().toString().length()>0)
+		{
+			if(txt_nmr.getText().toString().charAt(0)=='<')
+			{
+				txt_nmr.setText("");
+			}
+		}
+	}
 	}
 }
