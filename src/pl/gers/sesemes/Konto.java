@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Konto extends Activity implements OnClickListener{
 
@@ -81,6 +82,9 @@ public class Konto extends Activity implements OnClickListener{
 	    edytor.putInt(txt_nazwa.getText().toString()+"_hash", acchash);
 	    edytor.putString(acchash.toString(), txt_nazwa.getText().toString());
 	    edytor.putString("allaccnames", allaccnames+txt_nazwa.getText().toString()+";");
+		}else{
+			 Toast.makeText(getApplicationContext(), "Konto o tej nazwie ju¿ istnieje.",
+			          Toast.LENGTH_SHORT).show();
 		}
 	    }else{
 		
@@ -114,7 +118,6 @@ public class Konto extends Activity implements OnClickListener{
 		if (hasFocus)
 		{just_deleted=false;}
 	}
-	@Override
 	public void onClick(View v) {
 		just_deleted=true;
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);

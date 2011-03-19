@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-        <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_below="@+id/txt_pass" android:layout_alignLeft="@+id/txt_pass" android:layout_alignRight="@+id/txt_pass" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/textView1" android:text="@string/ustawienia_info"></TextView>
-            <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btn_newaccount" android:text="Dodaj nowe konto"></Button>
-            <TextView android:text="Konta Multibox:" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-            <ListView android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/lv_listakont"></ListView>
-            </LinearLayout>
-       

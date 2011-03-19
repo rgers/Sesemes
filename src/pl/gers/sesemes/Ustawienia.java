@@ -46,7 +46,7 @@ public class Ustawienia extends Activity implements OnClickListener {
 			      
 			      Intent myint = new Intent(getApplicationContext(), Konto.class);
 			  	myint.putExtra("nazwa_konta", ((TextView) view).getText());
-			  	myint.putExtra("numer_konta", noofaccs+1);
+			  	myint.putExtra("numer_konta", noofaccs);
 			  	
 			  	startActivity(myint);
 			    }
@@ -55,6 +55,8 @@ public class Ustawienia extends Activity implements OnClickListener {
 				
 		Button btn1 = (Button)findViewById(R.id.btn_newaccount);
 		btn1.setOnClickListener(this);
+		Button btn2 = (Button)findViewById(R.id.btn_clear);
+		btn2.setOnClickListener(this);
 	    
 	}
 
@@ -64,10 +66,10 @@ public class Ustawienia extends Activity implements OnClickListener {
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
         noofaccs = prefs.getInt("no_of_accounts", 0);
         ArrayList<String> accounts = new ArrayList<String>();
-        if (noofaccs>0)
-        {
         String allaccnames = prefs.getString("allaccnames", ";");
         String accnames[] = TextUtils.split(allaccnames, ";");
+        if (accnames.length>1)
+        {
         for(Integer a=1;a<accnames.length-1;a++)
         {
         accounts.add(accnames[a]);
@@ -180,11 +182,23 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
 
 public void onClick(View v) {
-	
+	 switch(v.getId()){
+	 
+	 case R.id.btn_newaccount:
 	Intent myint = new Intent(this, Konto.class);
 	myint.putExtra("numer_konta", noofaccs+1);
 	
 	startActivity(myint);
+	break;
+	
+	 case R.id.btn_clear:
+	SharedPreferences prefs = getSharedPreferences("prefs", 0);
+	SharedPreferences.Editor edytor = prefs.edit();
+	edytor.clear();
+	edytor.commit();
+	onWindowFocusChanged(true);
+	break;
+	 }
 }
 
 }

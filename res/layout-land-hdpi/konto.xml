@@ -5,7 +5,7 @@
     <LinearLayout android:id="@+id/linearLayout1" android:layout_height="match_parent" android:orientation="vertical" android:layout_width="250dp">
         <EditText android:layout_width="match_parent" android:hint="Nazwa konta" android:layout_height="wrap_content" android:text="" android:id="@+id/txt_name"></EditText>
         <EditText android:layout_width="match_parent" android:text="" android:hint="Użytkownik" android:layout_height="wrap_content" android:id="@+id/txt_user"></EditText>
-        <EditText android:layout_width="match_parent" android:text="" android:hint="Hasło" android:layout_height="wrap_content" android:id="@+id/txt_pass"></EditText>
+        <EditText android:layout_width="match_parent" android:text="" android:hint="Hasło" android:layout_height="wrap_content" android:id="@+id/txt_pass" android:password="true"></EditText>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/btn_delaccount" android:layout_marginTop="20dip" android:text="Usuń konto"></Button>
         <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Konto domyślne" android:id="@+id/chk_default"></CheckBox>
     </LinearLayout>

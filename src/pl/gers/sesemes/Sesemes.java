@@ -57,6 +57,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,7 +87,7 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
         	}
         Button btn_wyslij = (Button) findViewById(R.id.btn_wyslij);
 		btn_wyslij.setOnClickListener(this);
-		Button btn_contact = (Button) findViewById(R.id.btn_contact);
+		ImageButton btn_contact = (ImageButton) findViewById(R.id.btn_contact);
 		btn_contact.setOnClickListener(this);
 		EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		txt_wiadomosc.addTextChangedListener(this);

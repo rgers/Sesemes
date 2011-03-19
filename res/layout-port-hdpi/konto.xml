@@ -5,7 +5,7 @@
   android:layout_height="match_parent" android:orientation="vertical">
     <EditText android:text="" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nazwa konta" android:id="@+id/txt_name"></EditText>
     <EditText android:text="" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Użytkownik" android:id="@+id/txt_user"></EditText>
-    <EditText android:text="" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hasło" android:id="@+id/txt_pass"></EditText>
+    <EditText android:text="" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hasło" android:id="@+id/txt_pass" android:password="true"></EditText>
     <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Konto domyślne" android:id="@+id/chk_default"></CheckBox>
     <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Usuń konto" android:layout_marginTop="20dip" android:id="@+id/btn_delaccount"></Button>
     <TextView android:text="Wartości są aktualizowane podczas wysyłania smsa z tego konta" android:id="@+id/freesmsinfo" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
