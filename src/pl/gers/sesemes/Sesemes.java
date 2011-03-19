@@ -47,15 +47,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +67,7 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
     /** Called when the activity is first created. */
 	String user, passwd;
 	Integer smsy_free, smsy_paid;
+	Integer acc_hash=0;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,9 +76,7 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
         Intent intent = getIntent();
         Uri int_uri = intent.getData();
         String tel=null;
-        SharedPreferences prefs = getSharedPreferences("prefs", 0);
-        smsy_free=prefs.getInt("smsy_free", 0);
-        smsy_paid=prefs.getInt("smsy_paid", 0);
+        
         if (int_uri!=null)
         	{
         	
@@ -92,6 +93,47 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
 		
 		
 		    }
+    
+    public void onResume() {
+		
+			SharedPreferences prefs = getSharedPreferences("prefs", 0);
+	        String allaccnames = prefs.getString("allaccnames", ";");
+	        Integer noofaccs = prefs.getInt("no_of_accounts", 0);
+	        if(noofaccs>1)
+	        {
+	        	TextView txt_konta = (TextView) this.findViewById(R.id.textView1);
+	            txt_konta.setVisibility(View.VISIBLE);
+	        	 Spinner spn_konta = (Spinner) findViewById(R.id.spn_konta);
+	        	 spn_konta.setVisibility(View.VISIBLE);
+	        	 ArrayList<String> accounts = new ArrayList<String>();
+	        	 Integer selected_pos=0;
+	             if (noofaccs>0)
+	             {
+	             
+	             String accnames[] = TextUtils.split(allaccnames, ";");
+	             int b=prefs.getInt("account_default",1);
+	             for(Integer a=1;a<accnames.length-1;a++)
+	             {
+	             accounts.add(accnames[a]);
+	                          
+	             if (b==prefs.getInt(accnames[a]+"_hash", 0))
+	             {
+	            	 selected_pos=a-1;
+	             }
+	             }
+	             }
+	             
+	             spn_konta.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, (String[]) accounts.toArray(new String [accounts.size ()])));
+	             spn_konta.setSelection(selected_pos);
+	        }else{
+	        	TextView txt_konta = (TextView) this.findViewById(R.id.textView1);
+	            txt_konta.setVisibility(View.GONE);
+	        Spinner spn_konta = (Spinner) findViewById(R.id.spn_konta);
+	        spn_konta.setVisibility(View.GONE);
+	        }
+	        super.onResume();
+		}
+		
 @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -104,6 +146,8 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher{
 @Override
 public boolean onOptionsItemSelected(MenuItem item) {
     // Handle item selection
+	
+	
     switch (item.getItemId()) {
     case R.id.menu_ustawienia:
         ustawienia();
@@ -144,14 +188,35 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		switch(id)
 		{
 		case (R.id.btn_wyslij):
+			
+			SharedPreferences prefs = getSharedPreferences("prefs", 0);
 			EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
-		SharedPreferences prefs = getSharedPreferences("prefs", 0);
-        user = prefs.getString("user", "");
-        passwd = prefs.getString("passwd", "");
-        if (user=="" || passwd=="")
-        {ustawienia(); break;}
-			new send_sms().execute(txt_wiadomosc.getText().toString(), txt_numer.getText().toString());
+		if(prefs.getInt("no_of_accounts", 0)>1)
+		{
+		Spinner spn_konta = (Spinner) findViewById(R.id.spn_konta);
+		
+		acc_hash = prefs.getInt(spn_konta.getSelectedItem().toString()+"_hash",0);
+		if (acc_hash!=0)
+		{
+        user = prefs.getString("account_"+acc_hash.toString()+"_user", "");
+        passwd = prefs.getString("account_"+acc_hash.toString()+"_passwd", "");
+		}}else{
+			 if (prefs.getInt("no_of_accounts", 0)>0)
+		        {
+		        String allaccnames = prefs.getString("allaccnames", ";");
+		        String accnames[] = TextUtils.split(allaccnames, ";");
+		        acc_hash = prefs.getInt(accnames[1]+"_hash",0);		
+		        if (acc_hash!=0)
+				{
+		        user = prefs.getString("account_"+acc_hash.toString()+"_user", "");
+		        passwd = prefs.getString("account_"+acc_hash.toString()+"_passwd", "");
+				}
+		        }
+		}
+        if (user=="" || passwd=="" || prefs.getInt("no_of_accounts", 0)==0)
+        {Toast.makeText(Sesemes.this, "Najpierw musisz dodaæ konto.", Toast.LENGTH_LONG).show();ustawienia(); break;}
+			new send_sms().execute(txt_wiadomosc.getText().toString(), txt_numer.getText().toString(), user, passwd, acc_hash.toString());
 		break;
 		
 		case (R.id.btn_contact):
@@ -220,8 +285,8 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		        
 			EditText wiadomosc = (EditText)findViewById(R.id.txt_wiadomosc);
 			wiadomosc.setText("");
-			Integer smsy_free = prefs.getInt("smsy_free",0);
-			Integer smsy_paid = prefs.getInt("smsy_paid", 0);
+			Integer smsy_free = prefs.getInt(acc_hash+"smsy_free",0);
+			Integer smsy_paid = prefs.getInt(acc_hash+"smsy_paid", 0);
 			Toast.makeText(Sesemes.this, "Wiadomoœæ wys³ana. Pozosta³o " + smsy_free.toString() + " smsów bezp³atnych oraz "+smsy_paid.toString()+" smsów z do³adowania.", Toast.LENGTH_LONG).show();
 			}
 		}
@@ -269,9 +334,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>(); 
 	
 		pairs.add(new BasicNameValuePair("_dyncharset", "UTF-8"));
-		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", user));
+		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", strings[2]));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userLogin", " "));
-		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", passwd));
+		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", strings[3]));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.userPassword", " "));
 		pairs.add(new BasicNameValuePair("/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", "/start.phtml"));
 		pairs.add(new BasicNameValuePair("_D:/ptk/map/infoportal/portlet/header/formhandler/ProxyProfileFormhandler.successUrl", " "));
@@ -336,20 +401,22 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		token_indx=token_indx-74;
 		String smstoken = sb.substring(token_indx, token_indx+15);
 		//Log.v("cookie",smstoken);
-		
+		SharedPreferences prefs = getSharedPreferences("prefs", 0);
+	    SharedPreferences.Editor edytor = prefs.edit();
 	    int indx = sb.indexOf("bezp³atne :")+38;
 	    int indx_end = sb.indexOf("<", indx);
 	    //Log.v("Sesemes", sb.substring(indx,indx_end));
 
-	    Integer smsy_free_ = Integer.valueOf(sb.substring(indx,indx_end));
+	    Integer smsy_free_ = Integer.valueOf(sb.substring(indx,indx_end))-1;
+	    edytor.putInt(strings[4]+"smsy_free", smsy_free_.intValue());
 	    indx = sb.indexOf("z do³adowañ:", indx_end)+39;
+	    if (indx!=38)
+	    {
 	    indx_end = sb.indexOf("<", indx);
 	    Integer smsy_paid_ = Integer.valueOf(sb.substring(indx,indx_end));
-	    SharedPreferences prefs = getSharedPreferences("prefs", 0);
-	    SharedPreferences.Editor edytor = prefs.edit();
-		edytor.putInt("smsy_free", smsy_free_.intValue());
-		edytor.putInt("smsy_paid", smsy_paid_.intValue());
-		edytor.commit();
+	    edytor.putInt(strings[4]+"smsy_paid", smsy_paid_.intValue());
+	    }
+	    edytor.commit();
 		
 		String message = stripNonAscii(strings[0]);
 		List<NameValuePair> pairs1 = new ArrayList<NameValuePair>(); 

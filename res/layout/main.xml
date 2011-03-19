@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
         <RelativeLayout android:layout_height="match_parent" android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_x="5dip" android:layout_y="5dip" xmlns:android="http://schemas.android.com/apk/res/android">
             <Button android:id="@+id/btn_contact" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_toRightOf="@+id/txt_numer" android:layout_alignTop="@+id/txt_numer" android:layout_alignBottom="@+id/txt_numer" android:text="@string/btn_contact" android:textSize="10dip"></Button>
-            <EditText android:text="" android:id="@+id/txt_wiadomosc" android:layout_below="@+id/txt_numer" android:layout_alignLeft="@+id/txt_numer" android:layout_alignRight="@+id/txt_numer" android:hint="Wiadomość" android:inputType="textMultiLine" android:gravity="top" android:layout_height="150dip" android:layout_width="250dp"></EditText>
-            <Button android:text="Wyślij" android:id="@+id/btn_wyslij" android:layout_height="wrap_content" android:layout_width="150dip" android:layout_below="@+id/txt_wiadomosc" android:layout_alignLeft="@+id/txt_wiadomosc" android:layout_alignRight="@+id/txt_wiadomosc"></Button>
+            <EditText android:text="" android:id="@+id/txt_wiadomosc" android:layout_width="250dip" android:layout_below="@+id/txt_numer" android:layout_alignLeft="@+id/txt_numer" android:layout_alignRight="@+id/txt_numer" android:hint="Wiadomość" android:inputType="textMultiLine" android:gravity="top" android:layout_height="260dp"></EditText>
+            <LinearLayout android:layout_width="wrap_content" android:layout_below="@+id/txt_wiadomosc" android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_alignLeft="@+id/txt_wiadomosc" android:layout_alignRight="@+id/txt_wiadomosc" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:id="@+id/textView1" android:text="Konto:" android:layout_height="wrap_content"></TextView>
+                <Spinner android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/spn_konta" android:visibility="visible"></Spinner>
+                <Button android:id="@+id/btn_wyslij" android:layout_width="150dip" android:layout_height="wrap_content" android:text="Wyślij"></Button>
+            </LinearLayout>
             <TextView android:layout_height="wrap_content" android:text="" android:id="@+id/txt_znaki" android:layout_width="wrap_content" android:layout_toRightOf="@+id/txt_wiadomosc" android:layout_alignTop="@+id/txt_wiadomosc"></TextView>
-            <EditText android:text="" android:layout_height="50dip" android:id="@+id/txt_numer" android:layout_below="@+id/textView1" android:layout_toRightOf="@+id/textView1" android:hint="Numer telefonu" android:layout_width="450dp"></EditText>
+            <EditText android:text="" android:layout_height="50dip" android:id="@+id/txt_numer" android:hint="Numer telefonu" android:layout_width="250dip"></EditText>
         </RelativeLayout>
  
 

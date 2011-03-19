@@ -3,12 +3,10 @@ package pl.gers.sesemes;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,42 +19,23 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Ustawienia extends Activity implements OnClickListener, TextWatcher{
+public class Ustawienia extends Activity implements OnClickListener {
 
 	
 	ExpandableListAdapter mAdapter;
+	Integer noofaccs;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.ustawienia);
-	  /*  mAdapter = new MyExpandableListAdapter();
-	    setListAdapter(mAdapter); */
-	    SharedPreferences prefs = getSharedPreferences("prefs", 0);
-        String user = prefs.getString("user", "");
-        String passwd = prefs.getString("passwd", "");
-       // String test = prefs.getString("test", "");
-        EditText txt_user = (EditText) findViewById(R.id.txt_user);
-        txt_user.setText(user);
-        EditText txt_passwd = (EditText) findViewById(R.id.txt_pass);
-        txt_passwd.setText(passwd);
-       // View txt_user1 = (View)mAdapter.getChild(0,0);
-       // txt_user1.setText(test);
-	    txt_user.addTextChangedListener(this);
-	    txt_passwd.addTextChangedListener(this);
-	    
-	   
-	
-		ListView lv1=(ListView)findViewById(R.id.listView1);
-		 String[] COUNTRIES = new String[] {
-			    "Konto 1", "Konto 2", "Konto 3" };
+	 
+		ListView lv1=(ListView)findViewById(R.id.lv_listakont);
 		 
 		 lv1.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view,
@@ -64,37 +43,52 @@ public class Ustawienia extends Activity implements OnClickListener, TextWatcher
 			      // When clicked, show a toast with the TextView text
 			      Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
 			          Toast.LENGTH_SHORT).show();
+			      
+			      Intent myint = new Intent(getApplicationContext(), Konto.class);
+			  	myint.putExtra("nazwa_konta", ((TextView) view).getText());
+			  	myint.putExtra("numer_konta", noofaccs+1);
+			  	
+			  	startActivity(myint);
 			    }
 			  });
-		 ArrayList<String> test = new ArrayList<String>();
-		 test.
-		lv1.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, COUNTRIES));
-	    // TODO Auto-generated method stub
+		 
+				
+		Button btn1 = (Button)findViewById(R.id.btn_newaccount);
+		btn1.setOnClickListener(this);
+	    
 	}
 
-	
-
-	public void afterTextChanged(Editable arg0) {
+	public void onWindowFocusChanged (boolean hasFocus) {
+		if (hasFocus)
+		{
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
-		SharedPreferences.Editor edytor = prefs.edit();
-		EditText txt_user1 = (EditText)mAdapter.getChild(0,0);
-		EditText txt_user = (EditText) findViewById(R.id.txt_user);
-		EditText txt_passwd = (EditText) findViewById(R.id.txt_pass);
-		edytor.putString("user", txt_user.getText().toString());
-		edytor.putString("passwd", txt_passwd.getText().toString());
-		edytor.putString("test", txt_user1.getText().toString());
-		edytor.commit();
-	}
-
-	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-			int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		// TODO Auto-generated method stub
-		
+        noofaccs = prefs.getInt("no_of_accounts", 0);
+        ArrayList<String> accounts = new ArrayList<String>();
+        if (noofaccs>0)
+        {
+        String allaccnames = prefs.getString("allaccnames", ";");
+        String accnames[] = TextUtils.split(allaccnames, ";");
+        for(Integer a=1;a<accnames.length-1;a++)
+        {
+        accounts.add(accnames[a]);
+        }
+        }
+        
+		 
+       
+       // String test = prefs.getString("test", "");
+       // View txt_user1 = (View)mAdapter.getChild(0,0);
+       // txt_user1.setText(test);
+	   
+	    
+	   
+	
+		ListView lv1=(ListView)findViewById(R.id.lv_listakont);
+		//if (noofaccs>0)
+		//{
+			lv1.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, (String[]) accounts.toArray(new String [accounts.size ()])));
+	//}
+		}
 	}
 
 
@@ -186,11 +180,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
 
 public void onClick(View v) {
+	
 	Intent myint = new Intent(this, Konto.class);
-	myint.putExtra("numer_konta", 1);
+	myint.putExtra("numer_konta", noofaccs+1);
 	
 	startActivity(myint);
-	
 }
 
 }
