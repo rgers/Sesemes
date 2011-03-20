@@ -55,6 +55,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,7 +66,7 @@ import android.widget.Toast;
 
 
 
-public class Sesemes extends Activity implements OnClickListener, TextWatcher, OnFocusChangeListener{
+public class Sesemes extends Activity implements OnClickListener, TextWatcher, OnFocusChangeListener, OnLongClickListener{
     /** Called when the activity is first created. */
 	String user, passwd, sendto;
 	Integer smsy_free, smsy_paid;
@@ -78,7 +79,7 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher, O
         Intent intent = getIntent();
         Uri int_uri = intent.getData();
         String tel=null;
-        EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+        EditText txt_numer = (EditText)findViewById(R.id.txt_numer);
         if (int_uri!=null)
         	{
         	
@@ -86,12 +87,20 @@ public class Sesemes extends Activity implements OnClickListener, TextWatcher, O
       
       txt_numer.setText(tel);
       sendto=tel;
+        	}else{
+        		SharedPreferences prefs = getSharedPreferences("prefs", 0);
+        		if (prefs.getString("startowynr_numer", "00000")!="00000")
+        		{
+        			txt_numer.setText("<"+prefs.getString("startowynr_nazwa", "")+">");
+        		      sendto=prefs.getString("startowynr_numer", "00000");	
+        		}
         	}
         txt_numer.setOnFocusChangeListener(this);
         Button btn_wyslij = (Button) findViewById(R.id.btn_wyslij);
 		btn_wyslij.setOnClickListener(this);
 		ImageButton btn_contact = (ImageButton) findViewById(R.id.btn_contact);
 		btn_contact.setOnClickListener(this);
+		btn_contact.setOnLongClickListener(this);
 		EditText txt_wiadomosc = (EditText) findViewById(R.id.txt_wiadomosc);
 		txt_wiadomosc.addTextChangedListener(this);
 		
@@ -186,6 +195,12 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	startActivity(myint);
 	
 }
+	
+	private void kontakty() {
+		Intent myint = new Intent(this, Kontakty.class);
+		startActivityForResult(myint, 2);
+		
+	}
 	public void onClick(View v) 
 	{
 		int id = v.getId();
@@ -226,35 +241,34 @@ public boolean onOptionsItemSelected(MenuItem item) {
 		break;
 		
 		case (R.id.btn_contact):
-			get_contact();
+			kontakty();
+			//get_contact();
 		break;
 		
 		
 		}
 		
 	}
-	public void get_contact()
-	{
-	Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds. Phone.CONTENT_URI);
-	startActivityForResult(i, 1);
-	}
+	
 	  @Override  
 	    public void onActivityResult(int reqCode, int resultCode, Intent data) {  
 	        super.onActivityResult(reqCode, resultCode, data);  
 	  
 	        switch (reqCode) {  
-	            case (1):  
+	            case (2):  
 	                if (resultCode == Activity.RESULT_OK) {  
-	                    Uri contactData = data.getData();  
-	                    Cursor c = managedQuery(contactData, null, null, null, null);  
-	                    if (c.moveToFirst()) {  
-	                        String number = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER)); 
-	                        String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.DISPLAY_NAME));
+	                        String number = data.getExtras().getString("numer");
+	                        String name = data.getExtras().getString("nazwa");
 	                        EditText txt_numer = (EditText) findViewById(R.id.txt_numer);
+	                        if(name.length()>0)
+	                        {
 	                        txt_numer.setText("<" + name + ">"); 
+	                        }else{
+	                        	txt_numer.setText(number); 
+	                        }
 	                        sendto = number;
 	                    }  
-	                }  
+	                  
 	                break;  
 	        }  
 	    }  
@@ -563,7 +577,6 @@ private StringBuffer getHTMLBuffer(InputStream input)
 		
 	}
 
-	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 	if(hasFocus)
 	{
@@ -576,5 +589,17 @@ private StringBuffer getHTMLBuffer(InputStream input)
 			}
 		}
 	}
+	}
+
+	public boolean onLongClick(View v) {
+		SharedPreferences prefs = getSharedPreferences("prefs", 0);
+		sendto = prefs.getString("ulubionynr_numer", "00000");
+		if (sendto!="00000")
+		{
+		EditText txt_numer = (EditText)findViewById(R.id.txt_numer);
+		txt_numer.setText("<" + prefs.getString("ulubionynr_nazwa", "Ulubiony") + ">");
+		return true;
+		}else{return false;}
+		
 	}
 }

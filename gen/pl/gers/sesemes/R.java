@@ -15,36 +15,48 @@ public final class R {
         public static final int lapka=0x7f020001;
     }
     public static final class id {
-        public static final int btn_clear=0x7f060013;
-        public static final int btn_contact=0x7f06000b;
-        public static final int btn_delaccount=0x7f060004;
-        public static final int btn_newaccount=0x7f060012;
-        public static final int btn_wyslij=0x7f06000f;
-        public static final int chk_default=0x7f060003;
-        public static final int freesmsinfo=0x7f060005;
-        public static final int linearLayout1=0x7f060007;
-        public static final int linearLayout2=0x7f060008;
-        public static final int lv_listakont=0x7f060015;
-        public static final int menu_oautorze=0x7f060017;
-        public static final int menu_ustawienia=0x7f060016;
-        public static final int relativeLayout1=0x7f06000a;
-        public static final int spn_konta=0x7f06000e;
-        public static final int textView1=0x7f06000d;
-        public static final int textView2=0x7f060014;
-        public static final int tview=0x7f060009;
-        public static final int txt_fsms=0x7f060006;
-        public static final int txt_name=0x7f060000;
-        public static final int txt_numer=0x7f06000c;
-        public static final int txt_pass=0x7f060002;
-        public static final int txt_user=0x7f060001;
+        public static final int btn_clear=0x7f06001e;
+        public static final int btn_contact=0x7f06000e;
+        public static final int btn_contactbook=0x7f060001;
+        public static final int btn_delaccount=0x7f060007;
+        public static final int btn_delstartowy=0x7f06001c;
+        public static final int btn_delulubiony=0x7f060018;
+        public static final int btn_newaccount=0x7f06001d;
+        public static final int btn_startowynr=0x7f060019;
+        public static final int btn_ulubionynr=0x7f060015;
+        public static final int btn_wyslij=0x7f060013;
+        public static final int chk_default=0x7f060006;
+        public static final int freesmsinfo=0x7f060008;
+        public static final int linearLayout1=0x7f06000a;
+        public static final int linearLayout2=0x7f06000b;
+        public static final int linearLayout3=0x7f060016;
+        public static final int linearLayout4=0x7f06001a;
+        public static final int linearlayout1=0x7f060000;
+        public static final int lv_calllog=0x7f060002;
+        public static final int lv_listakont=0x7f060020;
+        public static final int menu_oautorze=0x7f060022;
+        public static final int menu_ustawienia=0x7f060021;
+        public static final int relativeLayout1=0x7f06000d;
+        public static final int spn_konta=0x7f060012;
+        public static final int textView1=0x7f060011;
+        public static final int textView2=0x7f06001f;
+        public static final int tview=0x7f06000c;
+        public static final int txt_fsms=0x7f060009;
+        public static final int txt_name=0x7f060003;
+        public static final int txt_numer=0x7f06000f;
+        public static final int txt_pass=0x7f060005;
+        public static final int txt_startowynr=0x7f06001b;
+        public static final int txt_ulubionynr=0x7f060017;
+        public static final int txt_user=0x7f060004;
         public static final int txt_wiadomosc=0x7f060010;
-        public static final int txt_znaki=0x7f060011;
+        public static final int txt_znaki=0x7f060014;
     }
     public static final class layout {
-        public static final int konto=0x7f030000;
-        public static final int list_item=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int ustawienia=0x7f030003;
+        public static final int kontakty=0x7f030000;
+        public static final int konto=0x7f030001;
+        public static final int list_item=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int ustawienia=0x7f030004;
     }
     public static final class menu {
         public static final int main_menu=0x7f050000;

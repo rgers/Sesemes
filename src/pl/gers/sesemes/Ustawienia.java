@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -57,6 +60,15 @@ public class Ustawienia extends Activity implements OnClickListener {
 		btn1.setOnClickListener(this);
 		Button btn2 = (Button)findViewById(R.id.btn_clear);
 		btn2.setOnClickListener(this);
+		Button btn3 = (Button)findViewById(R.id.btn_ulubionynr);
+		btn3.setOnClickListener(this);
+		Button btn4 = (Button)findViewById(R.id.btn_startowynr);
+		btn4.setOnClickListener(this);
+		Button btn5 = (Button)findViewById(R.id.btn_delulubiony);
+		btn5.setOnClickListener(this);
+		Button btn6 = (Button)findViewById(R.id.btn_delstartowy);
+		btn6.setOnClickListener(this);
+		
 	    
 	}
 
@@ -64,6 +76,30 @@ public class Ustawienia extends Activity implements OnClickListener {
 		if (hasFocus)
 		{
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
+		TextView txt_nr = (TextView) findViewById(R.id.txt_ulubionynr);
+		TextView txt_start = (TextView) findViewById(R.id.txt_startowynr);
+		Button btn_delnr = (Button) findViewById(R.id.btn_delulubiony);
+		Button btn_delstart = (Button) findViewById(R.id.btn_delstartowy);
+		txt_start.setText("Numer startowy bêdzie wpisany zawsze po uruchomieniu programu.");
+		if (prefs.getString("ulubionynr_numer", "00000")!="00000")
+		{
+			txt_nr.setVisibility(View.VISIBLE);
+			btn_delnr.setVisibility(View.VISIBLE);
+			txt_nr.setText("Aktualnie ustawiony numer to " 
+					+ prefs.getString("ulubionynr_numer", "00000") 
+					+ " <" 
+					+ prefs.getString("ulubionynr_nazwa", "") 
+					+ "> Przytrzymaj d³u¿ej '³apkê', aby go u¿yæ.");
+		}else{txt_nr.setVisibility(View.GONE);btn_delnr.setVisibility(View.GONE);}
+		if (prefs.getString("startowynr_numer", "00000")!="00000")
+		{
+			txt_start.setText(txt_start.getText() + "Aktualnie ustawiony numer to " 
+					+ prefs.getString("startowynr_numer", "00000") 
+					+ " <" 
+					+ prefs.getString("startowynr_nazwa", "") 
+					+ ">");
+			btn_delstart.setVisibility(View.VISIBLE);
+		}else{btn_delstart.setVisibility(View.GONE);}
         noofaccs = prefs.getInt("no_of_accounts", 0);
         ArrayList<String> accounts = new ArrayList<String>();
         String allaccnames = prefs.getString("allaccnames", ";");
@@ -182,7 +218,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
 
 public void onClick(View v) {
-	 switch(v.getId()){
+	SharedPreferences prefs = getSharedPreferences("prefs", 0);
+	SharedPreferences.Editor edytor = prefs.edit(); 
+	switch(v.getId()){
 	 
 	 case R.id.btn_newaccount:
 	Intent myint = new Intent(this, Konto.class);
@@ -192,13 +230,80 @@ public void onClick(View v) {
 	break;
 	
 	 case R.id.btn_clear:
-	SharedPreferences prefs = getSharedPreferences("prefs", 0);
-	SharedPreferences.Editor edytor = prefs.edit();
+	
 	edytor.clear();
 	edytor.commit();
 	onWindowFocusChanged(true);
 	break;
+	
+	 case R.id.btn_ulubionynr:
+		 get_contact(1);
+		 break;
+	 case R.id.btn_startowynr:
+		 get_contact(2);
+		 break;
+	 case R.id.btn_delulubiony:
+		edytor.remove("ulubionynr_nazwa");
+		edytor.remove("ulubionynr_numer");
+			edytor.commit();
+			onWindowFocusChanged(true);
+		 break;
+	 case R.id.btn_delstartowy:
+		 edytor.remove("startowynr_nazwa");
+			edytor.remove("startowynr_numer");
+				edytor.commit();
+				onWindowFocusChanged(true);
+		 break;
 	 }
 }
+public void get_contact(int intnum)
+{
+Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds. Phone.CONTENT_URI);
+startActivityForResult(i, intnum);
+}
+
+@Override  
+public void onActivityResult(int reqCode, int resultCode, Intent data) {  
+    super.onActivityResult(reqCode, resultCode, data);  
+
+    switch (reqCode) {  
+        case (1):  
+            if (resultCode == Activity.RESULT_OK) {  
+                Uri contactData = data.getData();  
+                Cursor c = managedQuery(contactData, null, null, null, null); 
+                SharedPreferences prefs = getSharedPreferences("prefs", 0);
+            	SharedPreferences.Editor edytor = prefs.edit();
+                if (c.moveToFirst()) {  
+                    String numer = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER)); 
+                    String nazwa = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.DISPLAY_NAME));
+                    edytor.putString("ulubionynr_numer", numer);
+                	edytor.putString("ulubionynr_nazwa", nazwa); 
+                					} 
+                edytor.commit();
+            }
+        
+    	
+            break;  
+            
+        case (2):  
+            if (resultCode == Activity.RESULT_OK) {  
+                Uri contactData = data.getData();  
+                Cursor c = managedQuery(contactData, null, null, null, null); 
+                SharedPreferences prefs = getSharedPreferences("prefs", 0);
+            	SharedPreferences.Editor edytor = prefs.edit();
+                if (c.moveToFirst()) {  
+                    String numer = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER)); 
+                    String nazwa = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.DISPLAY_NAME));
+                    edytor.putString("startowynr_numer", numer);
+                	edytor.putString("startowynr_nazwa", nazwa); 
+                					} 
+                edytor.commit();
+            }
+        
+    	
+            break;  
+    }  
+}
+
 
 }
