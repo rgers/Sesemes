@@ -2,14 +2,14 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="horizontal" android:baselineAligned="false" android:layout_height="wrap_content" android:layout_width="wrap_content">
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="match_parent" android:orientation="vertical" android:layout_width="250dp">
-        <EditText android:layout_width="match_parent" android:hint="Nazwa konta" android:layout_height="wrap_content" android:text="" android:id="@+id/txt_name"></EditText>
-        <EditText android:layout_width="match_parent" android:text="" android:hint="Użytkownik" android:layout_height="wrap_content" android:id="@+id/txt_user"></EditText>
-        <EditText android:layout_width="match_parent" android:text="" android:hint="Hasło" android:layout_height="wrap_content" android:id="@+id/txt_pass" android:password="true"></EditText>
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_height="fill_parent" android:orientation="vertical" android:layout_width="250dp">
+        <EditText android:layout_width="fill_parent" android:hint="Nazwa konta" android:layout_height="wrap_content" android:text="" android:id="@+id/txt_name"></EditText>
+        <EditText android:layout_width="fill_parent" android:text="" android:hint="Użytkownik" android:layout_height="wrap_content" android:id="@+id/txt_user"></EditText>
+        <EditText android:layout_width="fill_parent" android:text="" android:hint="Hasło" android:layout_height="wrap_content" android:id="@+id/txt_pass" android:password="true"></EditText>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/btn_delaccount" android:layout_marginTop="20dip" android:text="Usuń konto"></Button>
         <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Konto domyślne" android:id="@+id/chk_default"></CheckBox>
     </LinearLayout>
-    <LinearLayout android:layout_width="wrap_content" android:id="@+id/linearLayout2" android:layout_height="match_parent" android:orientation="vertical">
+    <LinearLayout android:layout_width="wrap_content" android:id="@+id/linearLayout2" android:layout_height="fill_parent" android:orientation="vertical">
         <TextView android:layout_width="wrap_content" android:id="@+id/freesmsinfo" android:text="Wartości są aktualizowane podczas wysyłania smsa z tego konta" android:layout_height="wrap_content"></TextView>
         <TextView android:layout_width="wrap_content" android:id="@+id/txt_fsms" android:text="" android:layout_height="wrap_content"></TextView>
     </LinearLayout>

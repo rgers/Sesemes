@@ -5,7 +5,7 @@ android:layout_height="fill_parent"
 android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/linearlayout1">
-    <Button android:id="@+id/btn_contactbook" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wybierz z książki adresowej..."></Button>
+<Button android:id="@+id/btn_contactbook" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wybierz z książki adresowej..."></Button>
 <ListView
 android:id="@+id/lv_calllog"
 android:layout_width="fill_parent"

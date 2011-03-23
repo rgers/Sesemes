@@ -22,6 +22,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,9 +65,9 @@ public class Ustawienia extends Activity implements OnClickListener {
 		btn3.setOnClickListener(this);
 		Button btn4 = (Button)findViewById(R.id.btn_startowynr);
 		btn4.setOnClickListener(this);
-		Button btn5 = (Button)findViewById(R.id.btn_delulubiony);
+		ImageButton btn5 = (ImageButton)findViewById(R.id.btn_delulubiony);
 		btn5.setOnClickListener(this);
-		Button btn6 = (Button)findViewById(R.id.btn_delstartowy);
+		ImageButton btn6 = (ImageButton)findViewById(R.id.btn_delstartowy);
 		btn6.setOnClickListener(this);
 		
 	    
@@ -78,8 +79,8 @@ public class Ustawienia extends Activity implements OnClickListener {
 		SharedPreferences prefs = getSharedPreferences("prefs", 0);
 		TextView txt_nr = (TextView) findViewById(R.id.txt_ulubionynr);
 		TextView txt_start = (TextView) findViewById(R.id.txt_startowynr);
-		Button btn_delnr = (Button) findViewById(R.id.btn_delulubiony);
-		Button btn_delstart = (Button) findViewById(R.id.btn_delstartowy);
+		ImageButton btn_delnr = (ImageButton) findViewById(R.id.btn_delulubiony);
+		ImageButton btn_delstart = (ImageButton) findViewById(R.id.btn_delstartowy);
 		txt_start.setText("Numer startowy bêdzie wpisany zawsze po uruchomieniu programu.");
 		if (prefs.getString("ulubionynr_numer", "00000")!="00000")
 		{
@@ -155,7 +156,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public TextView getGenericView() {
         // Layout parameters for the ExpandableListView
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 64);
+                ViewGroup.LayoutParams.FILL_PARENT, 64);
 
         TextView textView = new TextView(Ustawienia.this);
         textView.setLayoutParams(lp);
@@ -169,7 +170,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
             View convertView, ViewGroup parent) {
     	LinearLayout lej = new LinearLayout(Ustawienia.this);
-    	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 64);
+    	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 64);
     	EditText nazwa = new EditText(Ustawienia.this);
         nazwa.setHint("Nazwa");
         nazwa.setLayoutParams(lp);

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.provider.CallLog.Calls;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 
 public class Kontakty extends Activity implements OnClickListener,OnItemClickListener{
@@ -31,11 +31,12 @@ public class Kontakty extends Activity implements OnClickListener,OnItemClickLis
 	    nazwa="";
 	    ListView lv1=(ListView)findViewById(R.id.lv_calllog);
 	    Uri allCalls = CallLog.Calls.CONTENT_URI; 
-	    Cursor c = managedQuery(allCalls, null, null, null, null); 
+	    Cursor c = managedQuery(allCalls, null, null, null, Calls.DEFAULT_SORT_ORDER); 
 	    lognumbers = new ArrayList<String>();
 	    lognames = new ArrayList<String>();
 	    loglv = new ArrayList<String>();
-	    while(c.moveToNext() & c.getPosition()<6)
+	    
+	    while(c.moveToNext() & loglv.size()<6)
 	    {
 	    	if(!lognumbers.contains(c.getString(c.getColumnIndex(CallLog.Calls.NUMBER))))
 	    	{

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-        <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_below="@+id/txt_pass" android:layout_alignLeft="@+id/txt_pass" android:layout_alignRight="@+id/txt_pass" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent">
-            <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:text="@string/ustawienia_info" android:layout_width="match_parent" android:layout_weight="1"></TextView>
+        <LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_below="@+id/txt_pass" android:layout_alignLeft="@+id/txt_pass" android:layout_alignRight="@+id/txt_pass" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="fill_parent">
+            <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:text="@string/ustawienia_info" android:layout_width="fill_parent" android:layout_weight="1"></TextView>
             <Button android:id="@+id/btn_ulubionynr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ustaw ulubiony numer" android:layout_weight="1"></Button>
-            <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout3" android:layout_weight="1" android:layout_width="match_parent">
+            <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout3" android:layout_weight="1" android:layout_width="fill_parent">
                 <TextView android:id="@+id/txt_ulubionynr" android:layout_height="wrap_content" android:text="TextView" android:layout_width="230dp" android:layout_marginBottom="10dp"></TextView>
-                <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Button" android:id="@+id/btn_delulubiony"></Button>
+                <ImageButton android:src="@drawable/del" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btn_delulubiony"></ImageButton>
             </LinearLayout>
             <Button android:id="@+id/btn_startowynr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ustaw numer startowy" android:layout_weight="1"></Button>
-            <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="match_parent" android:layout_weight="1" android:layout_marginBottom="5dp">
+            <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:layout_weight="1" android:layout_marginBottom="5dp">
                 <TextView android:id="@+id/txt_startowynr" android:layout_height="wrap_content" android:text="TextView" android:layout_width="230dp" android:layout_marginBottom="10dp"></TextView>
-                <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Button" android:id="@+id/btn_delstartowy"></Button>
+                <ImageButton android:src="@drawable/del" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/btn_delstartowy"></ImageButton>
             </LinearLayout>
-            <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_weight="1">
+            <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1">
                 <Button android:layout_height="wrap_content" android:id="@+id/btn_newaccount" android:text="Dodaj nowe konto" android:layout_width="wrap_content"></Button>
                 <Button android:layout_height="wrap_content" android:id="@+id/btn_clear" android:text="Reset Ustawień" android:layout_width="wrap_content"></Button>
             </LinearLayout>
             <TextView android:text="Konta Multibox:" android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></TextView>
-            <ListView android:layout_width="match_parent" android:id="@+id/lv_listakont" android:layout_weight="1" android:layout_height="100dp"></ListView>
+            <ListView android:layout_width="fill_parent" android:id="@+id/lv_listakont" android:layout_weight="1" android:layout_height="100dp"></ListView>
             </LinearLayout>
        
