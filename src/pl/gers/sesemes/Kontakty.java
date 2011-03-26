@@ -80,8 +80,13 @@ public class Kontakty extends Activity implements OnClickListener,OnItemClickLis
 	            case (1):  
 	                if (resultCode == Activity.RESULT_OK) {  
 	                    Uri contactData = data.getData();  
-	                    Cursor c = managedQuery(contactData, null, null, null, null);  
+	                    //String id = contactData.getLastPathSegment();
+	                    Cursor c = managedQuery(contactData, null, null, null, null);
+	                   // Cursor c = managedQuery(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,  
+	                   //		ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?",  
+	                   //         new String[]{id}, null); 
 	                    if (c.moveToFirst()) {  
+	                    	//int sizeofc = c.getCount();
 	                        numer = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.NUMBER)); 
 	                        nazwa = c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds. Phone.DISPLAY_NAME));
 	                                         }  
